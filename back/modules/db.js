@@ -19,6 +19,10 @@ module.exports = {
         db.run(sql, params, callback); // Запускаем запрос
     },
 
+    DBall: function (sqlCode, dataList, func){
+        db.all(sqlCode, dataList, func)
+    },
+
     CloseDatabase: function (){
         db.close((err) => {
             if (err) {
