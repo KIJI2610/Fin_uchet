@@ -4,12 +4,19 @@ let db
 
 module.exports = {
     OpenDatabase: function (namedb){
-            db = new sqilte3.Database(`./${namedb}`, err => {
+            db = new sqilte3.Database(`${namedb}`, err => {
             if(err){
                 return console.error(`Error database: ${err.message}`)
             }
             console.log('Connected to the in-memory SQlite database.')
         })
+    },
+
+    DBrun: function (sql, params, callback) {
+        if (!db) {
+            return console.error('Database is not open.');
+        }
+        db.run(sql, params, callback); // Запускаем запрос
     },
 
     CloseDatabase: function (){

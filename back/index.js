@@ -5,6 +5,7 @@ const routes = require('./modules/routes')
 const {OpenDatabase, CloseDatabase} = require('./modules/db')
 
 app.use('/api', routes)
+app.use(express.json())
 
 app.listen(port, () => {
     console.log('http://localhost:3000')
