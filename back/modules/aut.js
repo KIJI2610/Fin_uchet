@@ -7,12 +7,11 @@ module.exports = {
         
     }
 }
-checkUser('username', 'hashedPassword')
-async function checkUser(username, password) {
+checkUser('username')
+async function checkUser(username) {
     OpenDatabase('./../database/database.db')
     DBall("SELECT password FROM users WHERE username=?", [username], (err, rows) => {
         console.log(rows)
     })
     CloseDatabase()
-    
 }
