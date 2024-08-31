@@ -36,7 +36,8 @@ async function checkUser(username) {
             let result;
             if (rows.length === 0) {
                 result = 'no_user_exists'
-            } else {
+            } 
+            else {
                 result = rows
             }
             CloseDatabase()
