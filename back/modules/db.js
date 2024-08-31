@@ -1,10 +1,10 @@
-const sqilte3 = require('sqlite3').verbose()
+const sqlite3 = require('sqlite3').verbose()
 
 let db
 
 module.exports = {
     OpenDatabase: function (namedb){
-            db = new sqilte3.Database(`${namedb}`, err => {
+            db = new sqlite3.Database(`${namedb}`, err => {
             if(err){
                 return console.error(`Error database: ${err.message}`)
             }

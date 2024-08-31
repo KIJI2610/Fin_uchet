@@ -20,7 +20,7 @@
 .aut-container{
     width: 50%;
     height: 100%;
-    background-color:rgb(218, 122, 122) ;
+    /* background-color:rgb(218, 122, 122) ; */
 }
 
 .form{
@@ -33,6 +33,7 @@
 .aut-label{
     font-weight: 600;
     margin-bottom: 20px;
+    color: rgb(57, 57, 78);
 }
 .aut-inp{
     margin-top: 10px;
@@ -41,6 +42,8 @@
     border: none;
     border-bottom: 2px solid rgba(119, 119, 255, 0.466);
     transition: 200ms;
+    background-color: white;
+    color: black;
 }
 .aut-inp:focus{
     outline: none;
@@ -63,12 +66,14 @@
     border-radius: 5px;
     background-color: rgb(57, 57, 78);
     box-sizing: border-box;
-    padding-left: 20px;
-    padding-right: 20px;
+    /* padding-left: 20px;
+    padding-right: 20px; */
     color: white;
     outline: 2px solid white;
-    transition: background-color 200ms, color 200ms;
+    transition: 200ms;
     font-size: 12pt;
+    height: 50px;
+    width: 200px;
 }
 #move-aut-btn:hover{
     background-color: white;
@@ -82,8 +87,77 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 1s;
+    /* left: 400px; */
 }
 .move-left{
-    left: 0;
+    animation: anim-move-left 800ms forwards;
 }
+.move-right{
+    animation: anim-move-right 800ms forwards;
+}
+@keyframes anim-move-left{
+    0%{
+        left: 400px;
+    }
+    100%{
+        left: 0px;
+    }
+}
+@keyframes anim-move-right{
+    0%{
+        left: 0px;
+    }
+    100%{
+        left: 400px;
+    }
+}
+
+.move-left-btn{
+    animation: anim-move-left-btn 800ms forwards;
+}
+@keyframes anim-move-left-btn{
+    0%{
+        width: 200px;
+        height: 50px;
+    }
+    30%{
+        width: 50px;
+        height: 50px;
+    }
+    60%{
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+
+    }
+    100%{
+        width: 200px;
+        height: 50px;
+    }
+}
+.move-right-btn{
+    animation: anim-move-right-btn 800ms forwards;
+}
+@keyframes anim-move-right-btn{
+    0%{
+        width: 200px;
+        height: 50px;
+    }
+    10%{
+    }
+    30%{
+        width: 50px;
+        height: 50px;
+    }
+    60%{
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+
+    }
+    100%{
+        width: 200px;
+        height: 50px;
+    }
+}
+

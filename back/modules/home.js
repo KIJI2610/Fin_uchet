@@ -1,5 +1,7 @@
+
 module.exports = {
-    Balance: async function (req, res) {
-        res.send('null')
+    AccountInfo: async function (req, res) {
+        const balance = req.body
     }
+    
 }
