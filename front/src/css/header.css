@@ -1,5 +1,21 @@
-header{
+.main-header{
     width: 100%;
     height: 100px;
     background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.header-link{
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 14pt;
+}
+.user-account{
+    position: absolute;
+    left: 30px;
+    font-size: 20pt;
+    font-weight: 600;
+    
 }

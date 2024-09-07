@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 app.post('/aut', aut)
 app.post('/reg', reg)
-app.post('/home', AccountInfo)
+app.get('/home', AccountInfo)
 
 app.listen(port, () => {
     console.log('http://localhost:3000')
