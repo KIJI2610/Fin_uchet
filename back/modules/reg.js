@@ -1,34 +1,37 @@
-const {OpenDatabase, CloseDatabase, DBrun} = require('./db')
+const connection = require('./db_mysql')
 
 
 module.exports = {
     reg: async (req, res) => {
         const reg_data = req.body
         let response
-        response = await insertUser(reg_data.username, reg_data.password)
-        if(response.result === true){
-            res.send('registration_was_successful')
+        if(reg_data.username.length < 2){
+            res.send('Имя пользователя слишком короткое')
         }
         else{
-            res.send('registration_failed')
+            response = await insertUser(reg_data.username, reg_data.password)
+            if(response.result === true){
+                res.send('registration_was_successful')
+            }
+            else{
+                res.send('registration_failed')
+            }
         }
     }
 }
-
 // Функция для вставки данных
 async function insertUser(username, password) {
     return new Promise((resolve, reject) => {
-        OpenDatabase('./database/database.db');
-        DBrun(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, password], function(err) {
-            if (err) {
-                console.error(err.message);
-                CloseDatabase();
-                resolve({ result: false });
-            } else {
-                console.log('Row added with ID: ' + this.lastID);
-                CloseDatabase();
-                resolve({ result: true });
-            }
+
+        connection.query(`INSERT INTO users (username, password, balance) VALUES (?, ?, ?)`, [username, password, 0.0], function(err, result) {
+          if (err) {
+            console.error('Ошибка при выполнении запроса:', err.message);
+            resolve({ result: false, error: err.message });
+          } else {
+            console.log('Row added with ID: ' + result.insertId);
+            resolve({ result: true, insertId: result.insertId });
+          }
         });
+        
     });
 }

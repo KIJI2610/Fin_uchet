@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import CryptoJS from 'crypto-js'
+import Header from './mods/Header'
 
 function Aut(){
     const [regForm, setRegForm] = useState(false)
@@ -14,6 +15,7 @@ function Aut(){
     const REG_PASSWORD_RETYPE = useRef(null)
     const AUT_USERNAME = useRef(null)
     const AUT_PASSWORD = useRef(null)
+    
 
     function Move(regForm){
         if(regForm === false){
@@ -42,35 +44,44 @@ function Aut(){
 
     //Регистрация
     function registrationSend(username, password, retype_password){
-        const name = username.current.value
-        const pass = password.current.value
-        const data_user = {
-            username: name,
-            password: pass
-        }
-        if(password.current.value === retype_password.current.value){
-            console.log(data_user)
-            axios.post('http://localhost:3000/reg', data_user, {headers: {'Content-Type': 'application/json'}})
-                .then(response => {
-                    console.log('Response:', response.data)
-                    if(response.data === 'registration_was_successful'){
-                        const name_encrypt = CryptoJS.AES.encrypt(name, '12345678').toString()
-                        const pass_encrypt = CryptoJS.AES.encrypt(pass, '12345678').toString()
-                        const aut_data = name_encrypt + '~~' + pass_encrypt
-                        localStorage.setItem('aut_data', aut_data)
-                        setTimeout(() => {
-                            window.location.href = '/'
-                        },300)
-                    }
-                })
+        axios.get('http://localhost:3000/key')
+            .then(KEY_response => KEY_response.data)
+            .then(KEY => {
+                const name = username.current.value
+                const pass = password.current.value
+                const pass_encrypt = CryptoJS.AES.encrypt(pass, String(KEY)).toString()
+                const data_user = {
+                    username: name,
+                    password: pass_encrypt
+                }
+                if(password.current.value === retype_password.current.value){
+                    console.log(data_user)
+                    axios.post('http://localhost:3000/reg', data_user, {headers: {'Content-Type': 'application/json'}})
+                        .then(response => {
+                            console.log('Response:', response.data)
+                            if(response.data === 'registration_was_successful'){
+                                const name_encrypt = CryptoJS.AES.encrypt(name, String(KEY)).toString()
+                                const balance_encrypt = CryptoJS.AES.encrypt('0', String(KEY)).toString()
+                                const aut_data = name_encrypt + '~~' + pass_encrypt + '~~' + balance_encrypt
+                                localStorage.setItem('aut_data', aut_data)
+                                setTimeout(() => {
+                                    window.location.href = '/'
+                                },300)
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.message)
+                        });
+
+                }
+                else{
+                    console.log('Пароли не совпадают')
+                }
+                    })
                 .catch(error => {
-                    console.error('Error:', error.message)
-                });
+                    console.error('Error key:', error.message)
+                })
                 
-        }
-        else{
-            console.log('Пароли не совпадают')
-        }
     }
 
     //Авторизация
@@ -83,21 +94,26 @@ function Aut(){
         }
         console.log(data_user)
         axios.post('http://localhost:3000/aut', data_user, {headers: {'Content-Type': 'application/json'}})
+
             .then(response => {
                 console.log('Response:', response.data)
-                if(response.data === 'Авторизация прошла успешно'){
-                    const name_encrypt = CryptoJS.AES.encrypt(name, '12345678').toString()
-                    const pass_encrypt = CryptoJS.AES.encrypt(pass, '12345678').toString()
-                    const aut_data = name_encrypt + '~~' + pass_encrypt
-                    localStorage.setItem('aut_data', aut_data)
-                    setTimeout(() => {
-                        window.location.href = '/'
-                    },300)
+                if(response.data[0] === 'Авторизация прошла успешно'){
+                    axios.get('http://localhost:3000/key')
+                        .then(KEY_response => KEY_response.data)
+                        .then(KEY => {
+                            const name_encrypt = CryptoJS.AES.encrypt(name, String(KEY)).toString()
+                            const pass_encrypt = CryptoJS.AES.encrypt(pass, String(KEY)).toString()
+                            const balance_encrypt = CryptoJS.AES.encrypt(String(response.data[1]), String(KEY)).toString()
+                            const aut_data_encrypt = name_encrypt + '~~' + pass_encrypt + '~~' + balance_encrypt
+                            localStorage.setItem('aut_data', aut_data_encrypt)
+                            setTimeout(() => {
+                                window.location.href = '/'
+                            },1000)
+                        })
                 }
             })
-            .catch(error => {
-                console.error('Error:', error.message)
-            });
+            
+
     }
 
     // const handleLogin = () => {
