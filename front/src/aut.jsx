@@ -7,7 +7,6 @@ import Header from './mods/Header'
 
 function Aut(){
     const [regForm, setRegForm] = useState(false)
-    const navigate = useNavigate()
     const MOVE = useRef(null)
     const MOVE_BTN = useRef(null)
     const REG_USERNAME = useRef(null)
@@ -15,6 +14,8 @@ function Aut(){
     const REG_PASSWORD_RETYPE = useRef(null)
     const AUT_USERNAME = useRef(null)
     const AUT_PASSWORD = useRef(null)
+    const ERROR_WINDOW = useRef(null)
+    const [response_error, set_response_error] = useState('')
     
 
     function Move(regForm){
@@ -68,6 +69,10 @@ function Aut(){
                                     window.location.href = '/'
                                 },300)
                             }
+                            else{
+                                Show(ERROR_WINDOW)
+                                set_response_error(response.data)
+                            }
                         })
                         .catch(error => {
                             console.error('Error:', error.message)
@@ -75,7 +80,8 @@ function Aut(){
 
                 }
                 else{
-                    console.log('Пароли не совпадают')
+                    Show(ERROR_WINDOW)
+                    set_response_error('Пароли не совпадают')
                 }
                     })
                 .catch(error => {
@@ -111,18 +117,24 @@ function Aut(){
                             },1000)
                         })
                 }
+                else{
+                    Show(ERROR_WINDOW)
+                    set_response_error(response.data)
+                }
             })
-            
-
     }
 
-    // const handleLogin = () => {
-        
-    //     navigate('/')
-    //   }
+    function Show(element){
+        element.current.style.opacity = 100
+        setTimeout(() => {
+            element.current.style.opacity = 0
+        },4000)
+    }
 
     return(
+    <div className="aut-double-main-container">
         <div className="aut-main-container">
+            
             <div className="reg-container form-container">
                 
                 <div className="form">
@@ -147,6 +159,12 @@ function Aut(){
                 </div>
             </div>
         </div>
+        <div ref={ERROR_WINDOW} className="error-window">
+            {response_error}
+        </div>
+        
+    </div>
+        
     )
 }
 export default Aut
