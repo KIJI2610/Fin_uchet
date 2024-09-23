@@ -187,3 +187,40 @@
     padding-bottom: 12px;
     color: rgb(255, 77, 106);
 }
+.auto-pass{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 110px;
+    left: 300px;
+    background-color: rgb(178, 190, 234);
+    /* box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.3); */
+    transition: 200ms;
+}
+.auto-pass:hover{
+    box-shadow: 0px 0px 15px 1px rgba(0, 106, 255, 0.3);
+}
+.aut-container .form{
+    position: relative;
+    overflow: hidden;
+}
+
+.save-pass{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 110px;
+    left: 410px;
+    background-color: rgb(168, 219, 181);
+    /* box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.3); */
+    transition: box-shadow 200ms, left 500ms, opacity 500ms;
+    opacity: 0;
+}
+.save-pass:hover{
+    box-shadow: 0px 0px 15px 1px rgba(0, 255, 76, 0.322);
+}
+
+#save-pass-active{
+    opacity: 100;
+    left: 340px;
+}

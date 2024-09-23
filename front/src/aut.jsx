@@ -1,9 +1,8 @@
 import './css/aut.css'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import CryptoJS from 'crypto-js'
-import Header from './mods/Header'
 
 function Aut(){
     const [regForm, setRegForm] = useState(false)
@@ -15,8 +14,9 @@ function Aut(){
     const AUT_USERNAME = useRef(null)
     const AUT_PASSWORD = useRef(null)
     const ERROR_WINDOW = useRef(null)
+    const SAVE_PASS = useRef(null)
     const [response_error, set_response_error] = useState('')
-    
+    const [ShowPassword, set_ShowPassword] = useState(false)
 
     function Move(regForm){
         if(regForm === false){
@@ -131,6 +131,67 @@ function Aut(){
         },4000)
     }
 
+    function GeneratePassword(){
+        const compulsory_chars = ['@', '#', '$', '&', '?'];
+        const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+        const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const numbers = '0123456789';
+
+        function generatePassword(length = 15) {
+            // Убедимся, что в пароле есть обязательные символы
+            const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            
+            let password = [];
+            
+            // Добавляем по одному обязательному символу
+            password.push(getRandomElement(compulsory_chars));
+            password.push(getRandomElement(lowercaseLetters));
+            password.push(getRandomElement(uppercaseLetters));
+            
+            // Заполняем оставшуюся длину пароля случайными символами
+            const allChars = compulsory_chars.concat(lowercaseLetters.split(''), uppercaseLetters.split(''), numbers.split(''));
+            
+            for (let i = password.length; i < length; i++) {
+              password.push(getRandomElement(allChars));
+            }
+        
+            // Перемешиваем массив для случайного порядка
+            password = password.sort(() => Math.random() - 0.5);
+            SAVE_PASS.current.id = 'save-pass-active'
+
+            return password.join('');
+        }
+        set_ShowPassword(true)
+        const newPassword = generatePassword();
+        REG_PASSWORD.current.value = newPassword
+        REG_PASSWORD_RETYPE.current.value = newPassword
+        
+
+    }
+
+    function HiddenPassword(){
+        set_ShowPassword(false)
+    }
+
+    const DownloadButton = () => {
+        const handleDownload = () => {
+          const text = `${REG_PASSWORD.current.value}`;
+          const blob = new Blob([text], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+      
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'password.txt';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+      
+          // Освобождаем URL после скачивания
+          URL.revokeObjectURL(url);
+        };
+        handleDownload()
+    }
+
     return(
     <div className="aut-double-main-container">
         <div className="aut-main-container">
@@ -149,9 +210,11 @@ function Aut(){
                 <div className="form">
                     <label className='aut-label'>Регистрация</label>
                     <input ref={REG_USERNAME} className='aut-inp' type="text" name="username" placeholder='username' />
-                    <input ref={REG_PASSWORD} className='aut-inp' type="password" name="password" placeholder='password' />
-                    <input ref={REG_PASSWORD_RETYPE} className='aut-inp' type="password" placeholder='retype password' />
+                    <input ref={REG_PASSWORD} onInput={HiddenPassword} className='aut-inp' type={ShowPassword ? 'text':'password'} name="password" placeholder='password' />
+                    <input ref={REG_PASSWORD_RETYPE} className='aut-inp' type={ShowPassword ? 'text':'password'} placeholder='retype password' />
                     <button onClick={() => registrationSend(REG_USERNAME, REG_PASSWORD, REG_PASSWORD_RETYPE)} className='aut-btn'>Зарегистрироваться</button>
+                    <button title='Сгенерировать пароль' onClick={GeneratePassword} className='auto-pass'>A</button>
+                    <button title='Сохранить пароль' ref={SAVE_PASS} onClick={DownloadButton} className='save-pass'>S</button>
                 </div>
 
                 <div  ref={MOVE} className='move'>
