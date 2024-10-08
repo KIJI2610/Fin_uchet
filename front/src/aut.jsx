@@ -69,6 +69,10 @@ function Aut(){
                                     window.location.href = '/'
                                 },300)
                             }
+                            else if(response.data === 'name_taken'){
+                                Show(ERROR_WINDOW)
+                                set_response_error('Данное имя уже занято')
+                            }
                             else{
                                 Show(ERROR_WINDOW)
                                 set_response_error(response.data)

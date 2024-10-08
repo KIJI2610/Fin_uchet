@@ -1,22 +1,36 @@
 import './css/home.css'
 import Header from './mods/Header'
 import axios from 'axios'
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import CryptoJs from 'crypto-js';
+
+
 function Home(){
     const [balance, setBalance] = useState(null)
+    const balance_el = useRef(null)
+    const add_transaction_el = useRef(null)
     
-    ;(function(){
+    useEffect(() => {
         const local_storage = localStorage.getItem('aut_data')
-        const local_storage_arr = local_storage.split('~~')
-        
-    })()
+        const userDataArray = local_storage.split('~~');
+        const key = '1IChqk%$1l0HQPfU0qQl1phgm#Ssq94H';
+        const balanceDecrypt = CryptoJs.AES.decrypt(userDataArray[2], key).toString(CryptoJs.enc.Utf8);
+        setBalance(balanceDecrypt)
+    }, [])
+
+    function AddTransaction(){
+        location.href = '/add_tr'
+    }
+
     
     return(
         <div className="home-main-container">
             <Header/>
             <div className="container">
-                <div className="balance">Ваш баланс: </div>
-                <div className="recent-transaction"></div>
+                <div ref={balance_el} className="balance">Ваш баланс: {balance}</div>
+                <div ref={add_transaction_el} className="add-transaction">
+                    <button onClick={AddTransaction} className='add-transaction-btn'>Добавить транзакцию</button>
+                </div>
             </div>
         </div>
     )

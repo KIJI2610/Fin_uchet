@@ -4,6 +4,7 @@ import './css/App.css'
 import './css/aut.css'
 import Aut from './aut'
 import Home from './home'
+import TrWindow from './TrWindow'
 
 function App() {
   // const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="aut" element={<Aut />} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/add_tr" element={<ProtectedRoute><TrWindow /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )

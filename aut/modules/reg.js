@@ -29,6 +29,9 @@ module.exports = {
                 if(response.result === true){
                     res.send('registration_was_successful')
                 }
+                else if(response.result === 'name_taken'){
+                    res.send('name_taken')
+                }
                 else{
                     res.send('registration_failed')
                 }
@@ -47,6 +50,9 @@ async function insertUser(username, password) {
         connection.query(`INSERT INTO users (username, password, balance) VALUES (?, ?, ?)`, [username, password, 0.0], function(err, result) {
           if (err) {
             console.error('Ошибка при выполнении запроса:', err.message);
+            if(err.message === `Duplicate entry '${username}' for key 'users.idx_username'`){
+                resolve({result: 'name_taken'})
+            }
             resolve({ result: false, error: err.message });
           } else {
             console.log('Row added with ID: ' + result.insertId);
