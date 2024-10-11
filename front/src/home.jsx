@@ -1,4 +1,4 @@
-import './css/home.css'
+
 import Header from './mods/Header'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react';

@@ -24,8 +24,8 @@ export default function Header() {
     return (
         <header className='main-header'>
             <div className="user-account">{name}</div>
-            <a className='header-link' href="">Главная</a>
-            <a className='header-link' href="">Карты</a>
+            <a className='header-link' href="/">Главная</a>
+            <a className='header-link' href="/cards">Карты</a>
             <a className='header-link' href="">Транзакции</a>
         </header>
     );
